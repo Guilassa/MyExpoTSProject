@@ -1,19 +1,37 @@
+/*
+ * React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ */
+
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {Routes} from './App/routes/Routes';
+/* import { Ionicons } from '@expo/vector-icons';
+// Loading Icon Font
+Ionicons.loadFont(); */
+
+export const status = 'development';
+
+type filesType = {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  description: string;
+  filename: string;
+  path: string;
+  size: number;
+};
+
+export type DataItem = {
+  _id: string;
+  name: string;
+  description: string;
+  thumbnail: filesType;
+  file: filesType;
+};
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
-  );
+  return <Routes />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

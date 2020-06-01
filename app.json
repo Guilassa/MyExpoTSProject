@@ -9,9 +9,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./App/assets/icons/hp_logo_transparente.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./App/assets/icons/hp_logo_transparente.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
