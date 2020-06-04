@@ -7,9 +7,11 @@
 
 import React from 'react';
 import {Routes} from './App/routes/Routes';
-/* import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 // Loading Icon Font
-Ionicons.loadFont(); */
+Ionicons.loadFont(); 
 
 export const status = 'development';
 
@@ -33,5 +35,9 @@ export type DataItem = {
 };
 
 export default function App() {
-  return <Routes />;
+    return(
+    <SafeAreaProvider>
+      <Routes />
+    </SafeAreaProvider>
+    );
 }

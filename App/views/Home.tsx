@@ -1,8 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, ImageBackground, View} from 'react-native';
-import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
-function App() {
+export default function Home() {
 
   return (
     <View style={styles.container}>
@@ -13,14 +12,6 @@ function App() {
       />
       <Text style={styles.text}>Welcome 3D HP</Text>
     </View>
-  );
-}
-
-export default function AppContainer() {
-  return (
-    <SafeAreaProvider>
-      <App />
-    </SafeAreaProvider>
   );
 }
 
