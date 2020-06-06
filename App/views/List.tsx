@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Alert,
+  YellowBox,
 } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -40,12 +41,13 @@ function Item({
   item: DataItem;
 }) {
   return (
+    console.disableYellowBox = true,
     <ListItem
       key={item._id}
       leftAvatar={{
-        source: {
+        /* source: {
           uri: `http://mbp-guilassa.local:3000/${item.thumbnail.path}`,
-        },
+        }, */
         title: item.name[0],
         size: "medium",
       }}
