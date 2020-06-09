@@ -13,7 +13,7 @@ export type NavParamList = {
     HomeStack: undefined;
     AboutStack: undefined;
     ListNav: undefined;
-    ListStack: undefined;
+    ListStack: {isModified:boolean};
     UploadStack: undefined;
     ItemNav: {screen: string; params: {itemParam: DataItem}};
     ItemStack: {itemParam: DataItem};

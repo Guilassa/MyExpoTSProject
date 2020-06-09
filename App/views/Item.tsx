@@ -143,6 +143,7 @@ export default class ItemScreen extends React.Component<Props, States> {
             <Button
               title="View in 3D"
               onPress={() => {
+                //console.log(this.state.item);
                 this.props.navigation.navigate("ItemViewerStack", {
                   itemData: this.state.item,
                 });

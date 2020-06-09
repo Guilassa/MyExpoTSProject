@@ -1,133 +1,171 @@
+import ExpoTHREE, {THREE, Renderer} from 'expo-three';
 import * as React from 'react';
-import {StyleSheet, Text, Dimensions, View, Platform} from 'react-native';
+
 import {StackNavigationProp} from '@react-navigation/stack';
-import {NavParamList} from '../Routes/Routes';
+import {NavParamList} from '../routes/Routes';
 import {RouteProp} from '@react-navigation/native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import { ExpoWebGLRenderingContext, GLView } from 'expo-gl';
-import { Renderer, TextureLoader } from 'expo-three';
-import OrbitControlsView from 'expo-three-orbit-controls';
+import {DataItem} from '../../App';
+import {GLView, ExpoWebGLRenderingContext} from 'expo-gl';
+import {PerspectiveCamera, Scene} from 'three';
 import {
-  AmbientLight,
-  BoxBufferGeometry,
-  Fog,
-  GridHelper,
-  Mesh,
-  MeshStandardMaterial,
-  PerspectiveCamera,
-  PointLight,
-  Scene,
-  SpotLight,
-  Camera,
-} from 'three';
-require('./OBJLoader');
-import { Asset } from 'expo-asset';
+  View,
+} from 'react-native';
+import OrbitControlsView from 'expo-three-orbit-controls';
 
-const w = Dimensions.get('window');
-
+console.disableYellowBox = true;
 
 type Props = {
   navigation: StackNavigationProp<NavParamList, 'ItemViewerStack'>;
   route: RouteProp<NavParamList, 'ItemViewerStack'>;
 };
+type States = {
+  item: DataItem;
+  camera: THREE.Camera | undefined;
+  speedRotation_X: Number;
+  speedRotation_Y: Number;
+};
 
-
-export default function ItemViewer (){
-  const [camera, setCamera] = React.useState<Camera | null>(null);
-  const [loaded, setLoaded] = React.useState<Boolean>();
-
-  let timeout: number;
-
-  React.useEffect(() => {
-    // Clear the animation loop when the component unmounts
-    return () => clearTimeout(timeout);
-  }, []);
-
-  const preloadAssetsAsync = async () => {
-    await Promise.all([
-      require('./assets/dire_dire_ducks_above_water.mp3'),
-      require('./assets/dire_dire_ducks_underwater.mp3'),
-      require('./assets/wooden-duck.obj'),
-      require('./assets/wooden-duck.png'),
-      require('./assets/waternormals.jpg'),
-    ].map((module) => Asset.fromModule(module).downloadAsync()));
-    setLoaded(true);
+export default class ItemViewer extends React.Component<Props, States> {
+  camera: any;
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      item: this.props.route.params.itemData,
+      camera: undefined,
+      speedRotation_X: 0.0,
+      speedRotation_Y: 0.0,
+    };
   }
-  
-  const onContextCreate = async (gl: ExpoWebGLRenderingContext) => {
-    const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    const sceneColor = 0x6ad6f0;
+
+  timeout: any;
+
+  componentWillUnMount() {
+    // Clear the animation loop when the component unmounts
+    return () => clearTimeout(this.timeout);
+  }
+
+  onContextCreate = async (gl: ExpoWebGLRenderingContext) => {
+    const {drawingBufferWidth: width, drawingBufferHeight: height} = gl;
 
     // Create a WebGLRenderer without a DOM element
-    const renderer = new Renderer({ gl });
+    const renderer = new Renderer({gl});
     renderer.setSize(width, height);
-    renderer.setClearColor(sceneColor);
+    renderer.setClearColor(0xcccccc);
 
-    const camera = new PerspectiveCamera(70, width / height, 0.01, 1000);
-    camera.position.set(2, 5, 5);
+    const camera = new PerspectiveCamera(50, width / height, 0.1, 2000);
+    camera.position.set(0, 6, 12);
+    camera.lookAt(0, 0, 0);
 
-    setCamera(camera);
+    this.setState({camera: camera});
 
+    // scene
     const scene = new Scene();
-    scene.fog = new Fog(sceneColor, 1, 10000);
-    scene.add(new GridHelper(10, 10));
+    scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
 
-    const ambientLight = new AmbientLight(0x101010);
-    scene.add(ambientLight);
+    // lights
+    const directionalLightA = new THREE.DirectionalLight(0xffffff);
+    directionalLightA.position.set(1, 1, 1);
+    scene?.add(directionalLightA);
 
-    const pointLight = new PointLight(0xffffff, 2, 1000, 1);
-    pointLight.position.set(0, 200, 200);
-    scene.add(pointLight);
+    const directionalLightB = new THREE.DirectionalLight(0xffeedd);
+    directionalLightB.position.set(-1, -1, -1);
+    scene?.add(directionalLightB);
 
-    const spotLight = new SpotLight(0xffffff, 0.5);
-    spotLight.position.set(0, 500, 100);
-    spotLight.lookAt(scene.position);
-    scene.add(spotLight);
+    const ambientLight = new THREE.AmbientLight(0x222222);
+    scene?.add(ambientLight);
 
-    const cube = new IconMesh();
-    scene.add(cube);
+    
+    function getModel(id:string):any{
+      
+      switch (id) {
+        case "5edfc8883c840858f4f189ff":
+          return require('../assets/3DModels/5edfc8883c840858f4f189ff.obj');
+        case "5edfc9703c840858f4f18a01":
+          return require('../assets/3DModels/5edfc9703c840858f4f18a01.obj');
+        case "5edfd31b3c840858f4f18a03":
+          return require('../assets/3DModels/5edfd31b3c840858f4f18a03.obj');
+        case "5edfd3553c840858f4f18a05":
+          return require('../assets/3DModels/5edfd3553c840858f4f18a05.obj');
+        case "5edfd3a33c840858f4f18a07":
+          return require('../assets/3DModels/5edfd3a33c840858f4f18a07.obj');
+        case "5edfd4053c840858f4f18a09":
+          return require('../assets/3DModels/5edfd4053c840858f4f18a09.obj');
+        default:
+          return require('../assets/3DModels/5edfd3a33c840858f4f18a07.obj');
+      }
+    }
+    const model:any = getModel(this.state.item._id);
 
-    camera.lookAt(cube.position);
+    if (!model) {
 
+    }
+
+    /*TODO: Download asynchronously the model file into a temporaly directory. 
+            Then get the localUri variable to require the raw data and finally loadAsync data.
+
+    /* const asset = Asset.fromModule(require(`../assets/3DModels/super_boo.stl`));
+    await asset.downloadAsync();
+    const uri = asset.localUri;
+    console.log(JSON.stringify(asset)); */
+
+    const mesh = await ExpoTHREE.loadAsync(
+      [model],
+      null,
+      () => {
+        return this.state.item._id;
+      },
+    );
+
+    ExpoTHREE.utils.scaleLongestSideToSize(mesh, 3);
+    ExpoTHREE.utils.alignMesh(mesh, {x: 0.5, y: 0.5, z: 0.5});
+
+    const pivot = new THREE.Group();
+    pivot.add(mesh);
+    scene.add(pivot);
+
+    camera.lookAt(mesh.position);
+
+    function update() {
+      mesh.rotation.x += 0;
+      mesh.rotation.y += 0;
+    }
 
     // Setup an animation loop
     const render = () => {
-      timeout = requestAnimationFrame(render);
+      this.timeout = requestAnimationFrame(render);
+      update();
       renderer.render(scene, camera);
 
-      // ref.current.getControls()?.update();
+      //ref.current.getControls()?.update();
       gl.endFrameEXP();
     };
     render();
   };
-
-  return (
-    <OrbitControlsView style={{ flex: 1 }} camera={camera}>
-      <GLView style={{ flex: 1 }} onContextCreate={onContextCreate} key="d" />
-    </OrbitControlsView>
-  );
-}
-
-class IconMesh extends Mesh {
-  constructor() {
-    super(
-      new BoxBufferGeometry(1.0, 1.0, 1.0),
-      new MeshStandardMaterial({
-        map: new TextureLoader().load(
-          require('./3DModels/Skull/Skull.jpg')
-        ),
-      })
+  render() {
+    return (
+      <View style={{flex: 1}}>
+        {/* <TouchableOpacity
+        activeOpacity={0.5}
+        style={styles.FloatingButton_X}
+        onPress={() => {
+          if (this.state.speedRotation_X === 0.00) {
+            this.setState({speedRotation_X : 0.01});
+          } else {
+            this.setState({speedRotation_X : 0.00});
+          }
+        }}>
+        <Text style={styles.FloatingButton_Text}>X</Text>
+      </TouchableOpacity> */}
+        <OrbitControlsView style={{flex: 1}} camera={this.state.camera}>
+          <GLView
+            style={{flex: 1}}
+            onContextCreate={this.onContextCreate}
+            key="d"
+          />
+        </OrbitControlsView>
+      </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  image: {width: w.width, paddingTop: '50%', paddingBottom: '50%'},
-  text: {fontWeight: 'bold', fontSize: 18},
-});
+

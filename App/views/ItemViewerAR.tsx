@@ -45,11 +45,9 @@ export default function ItemViewer (){
 
   const preloadAssetsAsync = async () => {
     await Promise.all([
-      require('./assets/dire_dire_ducks_above_water.mp3'),
-      require('./assets/dire_dire_ducks_underwater.mp3'),
-      require('./assets/wooden-duck.obj'),
-      require('./assets/wooden-duck.png'),
-      require('./assets/waternormals.jpg'),
+      require('../assets/3DModels/12140_Skull_v3_L2.mtl'),
+      require('../assets/3DModels/12140_Skull_v3_L2.obj'),
+      require('../assets/waternormals.jpg'),
     ].map((module) => Asset.fromModule(module).downloadAsync()));
     setLoaded(true);
   }

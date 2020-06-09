@@ -31,7 +31,7 @@ type States = {
   file_Data: filesStruct;
   image_Data: filesStruct;
   status_Permision: string;
-  uploading: boolean;
+  uploaded: boolean;
 };
 
 type Props = {
@@ -72,7 +72,7 @@ export default class ItemUploaderScren extends React.Component<Props, States> {
       file_Data: {},
       image_Data: {},
       status_Permision: '',
-      uploading: false,
+      uploaded: false,
     };
   }
 
@@ -262,6 +262,7 @@ export default class ItemUploaderScren extends React.Component<Props, States> {
                 console.log('Files are empty!');
             }
           }
+          this.setState = ({})
           console.log(JSON.stringify(err));
         });*/
         return
@@ -364,7 +365,7 @@ export default class ItemUploaderScren extends React.Component<Props, States> {
       Alert.alert('Unknown Error: An error appeared trying to upload a model!');
       console.log(JSON.stringify(error));
     }
-    //this.props.navigation.goBack();
+    this.props.navigation.navigate('ListStack', {isModified : this.state.uploaded});
   }
 
 

@@ -45,9 +45,9 @@ function Item({
     <ListItem
       key={item._id}
       leftAvatar={{
-        /* source: {
+        source: {
           uri: `http://mbp-guilassa.local:3000/${item.thumbnail.path}`,
-        }, */
+        },
         title: item.name[0],
         size: "medium",
       }}
