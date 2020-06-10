@@ -10,9 +10,9 @@
     "userInterfaceStyle": "automatic",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./App/assets/icons/hp_logo_transparente.png",
+    "icon": "./App/assets/images/EscherCube.png",
     "splash": {
-      "image": "./App/assets/icons/hp_logo_transparente.png",
+      "image": "./App/assets/images/EscherCube.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

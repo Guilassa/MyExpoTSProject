@@ -1,23 +1,17 @@
 import React from 'react';
 import {
-  StyleSheet,
-  Text,
-  Dimensions,
   View,
-  Platform,
   Alert,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {NavParamList} from '../Routes/Routes';
 import {RouteProp} from '@react-navigation/native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {AR} from 'expo';
 import {GraphicsView} from 'expo-graphics';
 import ExpoTHREE, {Renderer, THREE} from 'expo-three';
 import {BackgroundTexture, Camera} from 'expo-three-ar';
 import {DataItem} from '../../App';
 
-const w = Dimensions.get('window');
 console.disableYellowBox = true;
 
 type Props = {
@@ -137,7 +131,7 @@ export default class ItemViewerAR extends React.Component<Props, States> {
     renderer.setSize(width, height);
   };
 
-  onRender = (delta: any) => {
+  onRender = () => {
     /* if (mesh) {
       mesh.update(delta);
     } */
@@ -161,13 +155,4 @@ export default class ItemViewerAR extends React.Component<Props, States> {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  image: {width: w.width, paddingTop: '50%', paddingBottom: '50%'},
-  text: {fontWeight: 'bold', fontSize: 18},
-});
+
