@@ -17,7 +17,8 @@ export type NavParamList = {
     UploadStack: undefined;
     ItemNav: {screen: string; params: {itemParam: DataItem}};
     ItemStack: {itemParam: DataItem};
-    ItemViewerStack: {itemData: DataItem};
+    ItemViewerThreeStack: {itemData: DataItem};
+    ItemViewerARStack: {itemData: DataItem};
   };
 
 interface RoutesProps {}

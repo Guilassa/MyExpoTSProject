@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -8,16 +8,16 @@ import {
   RefreshControl,
   TouchableOpacity,
   Image,
-} from "react-native";
-import { DataItem } from "../../App";
-import { Divider, Text } from "react-native-elements";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { NavParamList } from "../routes/Routes";
-import { RouteProp } from "@react-navigation/native";
-import ProgressiveImageViewer from "../components/ProgressiveImageViewer";
-import { SafeAreaView } from "react-native-safe-area-context";
+} from 'react-native';
+import {DataItem} from '../../App';
+import {Divider, Text} from 'react-native-elements';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {NavParamList} from '../routes/Routes';
+import {RouteProp} from '@react-navigation/native';
+import ProgressiveImageViewer from '../components/ProgressiveImageViewer';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-const w = Dimensions.get("window");
+const w = Dimensions.get('window');
 
 type States = {
   isLoading: boolean;
@@ -26,8 +26,8 @@ type States = {
 };
 
 type Props = {
-  navigation: StackNavigationProp<NavParamList, "ItemStack">;
-  route: RouteProp<NavParamList, "ItemStack">;
+  navigation: StackNavigationProp<NavParamList, 'ItemStack'>;
+  route: RouteProp<NavParamList, 'ItemStack'>;
 };
 
 export default class ItemScreen extends React.Component<Props, States> {
@@ -35,6 +35,9 @@ export default class ItemScreen extends React.Component<Props, States> {
 
   constructor(props: Props) {
     super(props);
+    this.props.navigation.setOptions({
+      title: this.props.route.params.itemParam.name,
+    });
     this.state = {
       isLoading: true,
       refreshing: true,
@@ -74,7 +77,7 @@ export default class ItemScreen extends React.Component<Props, States> {
 
   handleRefresh() {
     this.setState((currentState) => {
-      return { refreshing: !currentState.refreshing };
+      return {refreshing: !currentState.refreshing};
     });
     this.makeRemoteRequest();
   }
@@ -88,37 +91,43 @@ export default class ItemScreen extends React.Component<Props, States> {
               refreshing={this.state.refreshing}
               onRefresh={() => this.handleRefresh()}
             />
-          }
-        >
-          <ProgressiveImageViewer
-            thumbnailSource={{
-              uri: `http://mbp-guilassa.local:3000/${
-                this.state.item.thumbnail.path
-              }?w=50&buster=${Math.random()}`,
-            }}
-            source={{
-              uri: `http://mbp-guilassa.local:3000/${
-                this.state.item.thumbnail.path
-              }?w=${w.width * 2}&buster=${Math.random()}`,
-            }}
-            style={styles.ImageViewer}
-            resizeMode="cover"
-          />
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => {
-              this.props.navigation.navigate("UploadStack");
-            }}
-            style={styles.FloatingButton_TouchableOpacity}
-          >
-            <Image
-              source={{
-                uri:
-                  "https://reactnativecode.com/wp-content/uploads/2017/11/Floating_Button.png",
+          }>
+          <View style={styles.ImageContainer}>
+            <ProgressiveImageViewer
+              thumbnailSource={{
+                uri: `http://mbp-guilassa.local:3000/${
+                  this.state.item.thumbnail.path
+                }?w=50&buster=${Math.random()}`,
               }}
-              style={styles.FloatingButton_Image}
+              source={{
+                uri: `http://mbp-guilassa.local:3000/${
+                  this.state.item.thumbnail.path
+                }?w=${w.width * 2}&buster=${Math.random()}`,
+              }}
+              style={styles.ImageViewer}
+              resizeMode="cover"
             />
-          </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.FloatingButton_3D}
+              onPress={() => {
+                this.props.navigation.navigate('ItemViewerThreeStack', {
+                  itemData: this.state.item,
+                });
+              }}>
+              <Text style={styles.FloatingButton_Text}>3D</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.FloatingButton_AR}
+              onPress={() => {
+                this.props.navigation.navigate('ItemViewerARStack', {
+                  itemData: this.state.item,
+                });
+              }}>
+              <Text style={styles.FloatingButton_Text}>AR</Text>
+            </TouchableOpacity>
+          </View>
           <Text h4 style={styles.DataContainer_Name}>
             {this.state.item.name}
           </Text>
@@ -133,23 +142,6 @@ export default class ItemScreen extends React.Component<Props, States> {
           <Text style={styles.DataContainer_Description}>
             Find me on Social here
           </Text>
-          <View>
-            <Button
-              title="Edit preview image"
-              onPress={() => {
-                //this.
-              }}
-            />
-            <Button
-              title="View in 3D"
-              onPress={() => {
-                //console.log(this.state.item);
-                this.props.navigation.navigate("ItemViewerStack", {
-                  itemData: this.state.item,
-                });
-              }}
-            />
-          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -159,46 +151,58 @@ export default class ItemScreen extends React.Component<Props, States> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
-    alignItems: "center",
-    paddingTop: 2,
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+    paddingTop:0,
   },
-  ImageContainer: {},
+  ImageContainer: {
+  },
   ImageViewer: {
-    width: w.width,
-    height: w.width,
-    borderRadius: 10,
+    width: w.width-5,
+    height: w.width-5,
   },
   DataContainer_Name: {
-    color: "#5E5E5E",
-    alignSelf: "flex-start",
+    color: '#5E5E5E',
+    alignSelf: 'flex-start',
     marginLeft: 30,
   },
   DataContainer_Description: {
-    color: "#5E5E5E",
-    alignSelf: "flex-start",
+    color: '#5E5E5E',
+    alignSelf: 'flex-start',
     marginTop: 5,
     marginHorizontal: 30,
     fontSize: 14,
   },
   DataContainer_Divider: {
-    backgroundColor: "#C0C0C0",
+    backgroundColor: '#C0C0C0',
     width: w.width - 60,
     margin: 20,
   },
-  FloatingButton_TouchableOpacity: {
-    position: "absolute",
+  FloatingButton_3D: {
+    position: 'absolute',
     width: 50,
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    left: 10,
+    bottom: 10,
+    borderRadius: 50,
+    borderColor: '#FFF',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  FloatingButton_AR: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
     right: 10,
     bottom: 10,
+    borderRadius: 50,
+    borderColor: '#FFF',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-
-  FloatingButton_Image: {
-    resizeMode: "contain",
-    width: 50,
-    height: 50,
+  FloatingButton_Text: {
+    color: '#FFF',
   },
 });

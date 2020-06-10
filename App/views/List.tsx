@@ -55,7 +55,7 @@ function Item({
       titleStyle={styles.ListItem_Title}
       subtitle={item.description}
       subtitleStyle={styles.ListItem_Subtitle}
-      onPress={() => {
+      onPress={(route) => {
         navigation.navigate("ItemNav", {
           screen: "ItemStack",
           params: { itemParam: item },

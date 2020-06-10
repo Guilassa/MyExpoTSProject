@@ -4,7 +4,8 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
 import ListScreen from '../views/List';
 import ItemScreen from '../views/Item';
-import ItemViewerScreen from '../views/ItemViewerThree';
+import ItemViewerThreeScreen from '../views/ItemViewerThree';
+import ItemViewerARScreen from '../views/ItemViewerAR';
 import ItemUploaderScren from '../views/ItemUploader';
 
 const ListStack = createStackNavigator();
@@ -78,11 +79,26 @@ export function ItemViewer() {
         }}
       />
       <ItemStack.Screen
-        name="ItemViewerStack"
-        component={ItemViewerScreen}
+        name="ItemViewerThreeStack"
+        component={ItemViewerThreeScreen}
         options={{
+          title: '3D Viewer',
           headerShown: true,
-          headerTransparent: true,
+          headerStyle: {
+            backgroundColor: '#0095d9',
+          },
+          headerTintColor: '#fff',
+        }}
+      />
+      <ItemStack.Screen
+        name="ItemViewerARStack"
+        component={ItemViewerARScreen}
+        options={{
+          title: 'AR Viewer',
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#0095d9',
+          },
           headerTintColor: '#fff',
         }}
       />

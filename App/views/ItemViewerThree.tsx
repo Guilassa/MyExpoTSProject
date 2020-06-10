@@ -8,15 +8,15 @@ import {DataItem} from '../../App';
 import {GLView, ExpoWebGLRenderingContext} from 'expo-gl';
 import {PerspectiveCamera, Scene} from 'three';
 import {
-  View,
+  View, Alert,
 } from 'react-native';
 import OrbitControlsView from 'expo-three-orbit-controls';
 
 console.disableYellowBox = true;
 
 type Props = {
-  navigation: StackNavigationProp<NavParamList, 'ItemViewerStack'>;
-  route: RouteProp<NavParamList, 'ItemViewerStack'>;
+  navigation: StackNavigationProp<NavParamList, 'ItemViewerThreeStack'>;
+  route: RouteProp<NavParamList, 'ItemViewerThreeStack'>;
 };
 type States = {
   item: DataItem;
@@ -45,6 +45,7 @@ export default class ItemViewer extends React.Component<Props, States> {
   }
 
   onContextCreate = async (gl: ExpoWebGLRenderingContext) => {
+    //TODO: Refactor function
     const {drawingBufferWidth: width, drawingBufferHeight: height} = gl;
 
     // Create a WebGLRenderer without a DOM element
@@ -74,7 +75,8 @@ export default class ItemViewer extends React.Component<Props, States> {
     const ambientLight = new THREE.AmbientLight(0x222222);
     scene?.add(ambientLight);
 
-    
+    // TODO: Delete hardcode list of models and threat it dinamically
+
     function getModel(id:string):any{
       
       switch (id) {
@@ -97,7 +99,8 @@ export default class ItemViewer extends React.Component<Props, States> {
     const model:any = getModel(this.state.item._id);
 
     if (!model) {
-
+      Alert.alert('Sorry =( \nImposible to load the model desired.')
+      this.props.navigation.goBack()
     }
 
     /*TODO: Download asynchronously the model file into a temporaly directory. 
@@ -144,6 +147,7 @@ export default class ItemViewer extends React.Component<Props, States> {
   render() {
     return (
       <View style={{flex: 1}}>
+        {/*TODO: Allow change dinamically speed rotation and size of object*/}
         {/* <TouchableOpacity
         activeOpacity={0.5}
         style={styles.FloatingButton_X}
